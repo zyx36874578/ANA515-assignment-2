@@ -1,0 +1,59 @@
+---
+title: "ANA515Assignment2"
+author: "Lunhan Zhang"
+date: "2022-09-18"
+output:
+  pdf_document: default
+  html_document: default
+
+---
+
+
+## Section 1: Description of the data. 
+
+This data set contains the data a global time series of case and death data for COVID-19.
+It is sourced from JHU CSSE COVID-19 Data as well as The New York Times.
+From this data, we will look the trend of death and test-positive and also the comparation by state in US.
+This is data is excel csv file.
+
+##Section 2: Reading the data into R. 
+
+```{r}
+data <- read.csv("COVID-19 Activity.csv")
+```
+
+##Section 3: Clean the data.
+```{r, echo = TRUE, results='hide'}
+library(dplyr)
+smallerdata <- data %>% 
+select(PEOPLE_POSITIVE_CASES_COUNT, CONTINENT_NAME, PROVINCE_STATE_NAME, REPORT_DATE, PEOPLE_DEATH_NEW_COUNT, PEOPLE_POSITIVE_NEW_CASES_COUNT, PEOPLE_DEATH_COUNT) %>% 
+filter(CONTINENT_NAME=='America') %>%
+rename("COUNTRY_NAME"="CONTINENT_NAME")%>%
+filter(REPORT_DATE>= ('2022-01-01'))
+
+```
+
+##Section 4: Characteristics of the data.
+
+
+This dataframe has `r nrow(smallerdata)` rows and `r ncol(smallerdata)` columns. The names of the columns and a brief description of each are in the table below:
+
+```{r}
+#this makes a new data.frame called text_tbl with two columns, Names and Description
+text_tbl <- data.frame( 
+Names = c("PROVINCE_STATE_NAME", "PEOPLE_POSITIVE_NEW_CASES_COUNT", "PEOPLE_DEATH_NEW_COUNT"), 
+Description = c("State name for the data", "Number of people were tested positive each day", "Number of people death each day")
+) 
+text_tbl #prints the table
+```
+
+##Section 5: Summary statistics.
+
+```{r}
+data_pick3 <- select(smallerdata, PROVINCE_STATE_NAME, PEOPLE_DEATH_NEW_COUNT, PEOPLE_POSITIVE_NEW_CASES_COUNT)
+```
+
+```{r, include = TRUE}
+Summarytable<-summary(data_pick3) #creates the summary
+Summarytable #prints the summary in your output
+```
